@@ -9,7 +9,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +29,7 @@ import com.paseshow.festival.quesos.services.ResourceNotFoundException;
 //@CrossOrigin(origins= {"http://localhost:4200"})
 @RestController
 @RequestMapping("/apiform")
+@CrossOrigin(origins = "*")
 public class ForhomeRestController {
 
 	
@@ -38,7 +41,7 @@ public class ForhomeRestController {
 			throws ResourceNotFoundException {
 		if(bindingResult.hasErrors()) {
 			ErrorSimple error = new ErrorSimple();
-			error.setId(2);
+			error.setId(1);
 			error.setDescripcion("Formulario incorrecto");
 			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
 			mapError.put("error", error);
@@ -57,6 +60,7 @@ public class ForhomeRestController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping(name="listAll", path="listAll")
 	public ResponseEntity<?> listAllForms(@RequestParam String idEvento) {
 		List<Formhome> listForm = this.forhomeServiceImpl.findAll();
