@@ -6,4 +6,5 @@ import com.paseshow.festival.quesos.models.entity.Eventoquesos;
 
 public interface EventosquesosDao extends JpaRepository<Eventoquesos, Long>{
 
+	Eventoquesos findByid(Long id);
 }
