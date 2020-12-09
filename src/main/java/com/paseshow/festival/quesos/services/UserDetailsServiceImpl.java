@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.paseshow.festival.quesos.models.entity.Eventoquesos;
 import com.paseshow.festival.quesos.security.entity.User;
 import com.paseshow.festival.quesos.security.entity.UsersFirst;
 
@@ -22,7 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		
 		return UsersFirst.build(user);
 	}
-	
 	
 
 }

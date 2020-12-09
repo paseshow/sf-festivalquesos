@@ -21,12 +21,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.paseshow.festival.quesos.model.util.ErrorSimple;
+import com.paseshow.festival.quesos.model.util.Mensajes;
 import com.paseshow.festival.quesos.security.dto.JwtDTO;
 import com.paseshow.festival.quesos.security.dto.LoginUser;
 import com.paseshow.festival.quesos.security.dto.NewUser;
@@ -105,7 +108,9 @@ public class AuthController {
 		
 		if(newUser.getRoles().contains("admin"))
 			roles.add(roleService.getByRolName(RoleName.ROLE_ADMIN).get());
-		
+		if(newUser.getRoles().contains("super"))
+			roles.add(roleService.getByRolName(RoleName.ROLE_SUPER_ADMIN).get());
+			
 		user.setRoles(roles);
 		userService.save(user);
 		
@@ -142,5 +147,23 @@ public class AuthController {
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(listUser);
 	}
+	
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@DeleteMapping(name="deletUser", path="{id}")
+	public ResponseEntity<?> deletUser(@PathVariable("id") Long id) {
+		
+		User userDelet = userService.findById(id);
+		if(userDelet != null) {
+			if(userService.delete(userDelet))
+				return ResponseEntity.ok().body("Se elimino correctamente");
+			
+			return new ResponseEntity(new Mensajes("Error al eliminar"), HttpStatus.CREATED);			
+		}
+		
+		return new ResponseEntity(new Mensajes("Usuario no encontrado"), HttpStatus.CREATED);
+	}
+	
+	
 
 }

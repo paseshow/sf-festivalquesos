@@ -34,9 +34,11 @@ public class Formhome {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Eventoquesos eventoquesos;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Codigosingresos codigoingreso;
+	private Codigosingresos codigoingreso;*/
+	
+	private String IdCodigo;
 	
 	public Eventoquesos getEventoquesos() {
 		return eventoquesos;
@@ -103,12 +105,12 @@ public class Formhome {
 	}
 
 	
-	public Codigosingresos getCodigoingreso() {
-		return codigoingreso;
+	public String getIdCodigo() {
+		return IdCodigo;
 	}
 
-	public void setCodigoingreso(Codigosingresos codigoingreso) {
-		this.codigoingreso = codigoingreso;
+	public void setIdCodigo(String IdCodigo) {
+		this.IdCodigo = IdCodigo;
 	}
 
 

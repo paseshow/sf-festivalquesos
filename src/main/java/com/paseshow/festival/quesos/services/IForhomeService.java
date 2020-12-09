@@ -9,4 +9,5 @@ public interface IForhomeService {
 
 	public List<Formhome> findAll();
 	public Formhome save(Formhome formhome);
+	public Formhome findById(Long id);
 }
