@@ -86,7 +86,7 @@ public class CodigosController {
 		
 	}
 	
-	@GetMapping(name="verifyCode", path="code")
+	@PostMapping(name="verifyCode", path="code")
 	public ResponseEntity<?> verificarCodigo(@Valid @RequestBody codigosDTO codigosDTO, BindingResult bindingResult)
 	throws ResourceNotFoundException{
 		

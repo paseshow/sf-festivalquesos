@@ -30,6 +30,16 @@ public class Eventoquesos implements Serializable {
 	
 	private Boolean active;
 	
+	private String fechaEvent;
+	
+
+	public String getFechaEvent() {
+		return fechaEvent;
+	}
+
+	public void setFechaEvent(String fechaEvent) {
+		this.fechaEvent = fechaEvent;
+	}
 
 	public Boolean getActive() {
 		return active;

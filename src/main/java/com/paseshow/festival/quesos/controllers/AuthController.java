@@ -108,8 +108,10 @@ public class AuthController {
 		
 		if(newUser.getRoles().contains("admin"))
 			roles.add(roleService.getByRolName(RoleName.ROLE_ADMIN).get());
-		if(newUser.getRoles().contains("super"))
-			roles.add(roleService.getByRolName(RoleName.ROLE_SUPER_ADMIN).get());
+		if(newUser.getRoles().contains("super")) {
+			roles.add(roleService.getByRolName(RoleName.ROLE_ADMIN).get());
+			roles.add(roleService.getByRolName(RoleName.ROLE_SUPER_ADMIN).get());			
+		}
 			
 		user.setRoles(roles);
 		userService.save(user);

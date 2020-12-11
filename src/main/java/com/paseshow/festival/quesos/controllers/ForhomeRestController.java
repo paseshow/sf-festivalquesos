@@ -57,7 +57,7 @@ public class ForhomeRestController {
 		
 		Formhome resp = this.forhomeServiceImpl.save(aux);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+		return ResponseEntity.ok().body(resp);
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")

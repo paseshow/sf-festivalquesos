@@ -7,6 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class EventoquesosDTO {
 
+	public String getFechaEvent() {
+		return fechaEvent;
+	}
+
+	public void setFechaEvent(String fechaEvent) {
+		this.fechaEvent = fechaEvent;
+	}
+
 	@NotNull
 	private String nameEvent;
 	
@@ -15,16 +23,21 @@ public class EventoquesosDTO {
 
 	@NotNull
 	private Boolean active;
+	
+	@NotNull
+	private String fechaEvent;
 
 	@JsonCreator
 	public EventoquesosDTO(
 			@JsonProperty ("nameEvent") String nameEvent,
 			@JsonProperty ("linkEvent") String linkEvent,
-			@JsonProperty ("active") Boolean active
+			@JsonProperty ("active") Boolean active,
+			@JsonProperty ("fechaEvent") String fechaEvent
 			) {
 		this.nameEvent = nameEvent;
 		this.linkEvent = linkEvent;
 		this.active = active;
+		this.fechaEvent = fechaEvent;
 	}
 
 	public String getNameEvent() {

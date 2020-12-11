@@ -38,6 +38,8 @@ public class EventoquesosController {
 	@Autowired
 	private EventosquesosServiceImpl eventosquesosServiceImpl;
 	
+	// hacer api para dar dos eventos activos segun la fecha y hora.
+	
 	@PreAuthorize("hasRole('USER')")
 	@PostMapping(name="add", path = "add")
 	public ResponseEntity<?> addNewEvent(@Valid @RequestBody EventoquesosDTO evento, BindingResult bindingResult)
@@ -56,10 +58,37 @@ public class EventoquesosController {
 		eventoNew.setNameEvent(evento.getNameEvent());
 		eventoNew.setLinkEvent(evento.getLinkEvent());
 		eventoNew.setActive(evento.getActive());
+		eventoNew.setFechaEvent(evento.getFechaEvent());
 
 		Eventoquesos eventosUpdate = eventosquesosServiceImpl.save(eventoNew);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body("Evento creado exitosamente!");
+	}
+	
+	@GetMapping(name="event", path="{id}")
+	public ResponseEntity<?> eventById(@PathVariable("id") Long id){
+		
+		if(id == null) {
+			ErrorSimple error = new ErrorSimple();
+			error.setId(1);
+			error.setDescripcion("Id null");
+			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+			mapError.put("error", error);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+		}
+		
+		Eventoquesos eventoquesos = eventosquesosServiceImpl.findByid(id);
+		
+		if(eventoquesos != null) {
+			return ResponseEntity.ok().body(eventoquesos);
+		}
+		
+		ErrorSimple error = new ErrorSimple();
+		error.setId(2);
+		error.setDescripcion("Id no encontrado");
+		Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+		mapError.put("error", error);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);		
 	}
 	
 	@GetMapping(name="list", path="list")
@@ -81,6 +110,50 @@ public class EventoquesosController {
 		return ResponseEntity.status(HttpStatus.CREATED).body("Evento eliminado correctamente");
 		
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Error al eliminar");
+	}
+	
+	@PutMapping(name="update", path="update/{id}")
+	public ResponseEntity<?> updateEvent(@Valid @RequestBody EventoquesosDTO evento, @PathVariable("id") Long id, BindingResult bindingResult)
+			throws ResourceNotFoundException {
+		
+		if(bindingResult.hasErrors())
+		{
+			ErrorSimple error = new ErrorSimple();
+			error.setId(1);
+			error.setDescripcion("Error servidor");
+			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+			mapError.put("error", error);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+		}
+		
+		if(id == null) {
+			ErrorSimple error = new ErrorSimple();
+			error.setId(1);
+			error.setDescripcion("Id null");
+			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+			mapError.put("error", error);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+		}
+		
+		Eventoquesos eventoUpdate = eventosquesosServiceImpl.findByid(id);
+		
+		if(eventoUpdate != null) {
+			eventoUpdate.setNameEvent(evento.getNameEvent());
+			eventoUpdate.setLinkEvent(evento.getLinkEvent());
+			eventoUpdate.setFechaEvent(evento.getFechaEvent());
+			eventoUpdate.setActive(evento.getActive());
+			
+			eventosquesosServiceImpl.save(eventoUpdate);
+			
+			return ResponseEntity.ok("Evento actualizado");
+		}
+		
+		ErrorSimple error = new ErrorSimple();
+		error.setId(1);
+		error.setDescripcion("Error al actualizar");
+		Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+		mapError.put("error", error);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
 	}
 
 }
