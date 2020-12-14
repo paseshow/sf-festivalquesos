@@ -23,15 +23,29 @@ public class Eventoquesos implements Serializable {
 	private Long id;
 	
 	@NotNull
-	private String nameEvent;
-	
-	
-	private String linkEvent;
-	
-	private Boolean active;
-	
+	private String nameEvent;	
+	private String linkEvent;	
+	private String linkChat;
+	private Boolean activeChat;	
+	private Boolean active;	
 	private String fechaEvent;
 	
+
+	public String getLinkChat() {
+		return linkChat;
+	}
+
+	public void setLinkChat(String linkChat) {
+		this.linkChat = linkChat;
+	}
+
+	public Boolean getActiveChat() {
+		return activeChat;
+	}
+
+	public void setActiveChat(Boolean activeChat) {
+		this.activeChat = activeChat;
+	}
 
 	public String getFechaEvent() {
 		return fechaEvent;

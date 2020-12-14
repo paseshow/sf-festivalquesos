@@ -1,5 +1,6 @@
 package com.paseshow.festival.quesos.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 
 import org.hibernate.mapping.Array;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,12 +84,12 @@ public class CodigosController {
 			}
 		}
 		
-		return ResponseEntity.ok().body("Se guardaron exitosamente!");
+		return ResponseEntity.ok().body("{}");
 		
 	}
 	
 	@PostMapping(name="verifyCode", path="code")
-	public ResponseEntity<?> verificarCodigo(@Valid @RequestBody codigosDTO codigosDTO, BindingResult bindingResult)
+	public ResponseEntity<?> verificarCodigo(@RequestBody codigosDTO codigosDTO, BindingResult bindingResult)
 	throws ResourceNotFoundException{
 		
 		if(bindingResult.hasErrors()) {
@@ -99,56 +101,122 @@ public class CodigosController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
 		}
 		
-		if(codigosServiceImpl.existById(codigosDTO.getId())) {
+		if(codigosDTO.getId() == 1) {
+			Eventoquesos eventoP = eventosquesosServiceImpl.findByid(codigosDTO.getIdEvent());
+			if( eventoP.getId() == codigosDTO.getIdEvent())  {
+				if(eventoP.getActive() && eventoP != null ) {
+					Formhome formUser = formhomeServiceImpl.findById(codigosDTO.getIdUser());
+					List<Long> codigos = formUser.getIdCodigos();
+					List<Long> idEventos = formUser.getIdevento();
+					
+					codigos.add(codigosDTO.getId());
+					idEventos.add(codigosDTO.getIdEvent());
+					formUser.setIdevento(idEventos);
+					formUser.setIdCodigos(codigos);
+					formhomeServiceImpl.save(formUser);
+					
+					Map<String, String> dev = new HashMap<String, String>();
+					
+					try {
+						String pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|"
+								+ "watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)"
+								+ "[^#\\&\\?\\n]*";
+						
+						Pattern compiledPattern = Pattern.compile(pattern);
+						Matcher matcher = compiledPattern.matcher(eventoP.getLinkEvent());       
+						String codigoYoutube = "";
+						
+						if (matcher.find()) {
+							codigoYoutube =  matcher.group();
+							String urlEncrypt = this.encrypt(psk, iv, codigoYoutube);
+							dev.put("dghjoi3543u", urlEncrypt);
+							dev.put("ff", eventoP.getFechaEvent());
+							
+							if(eventoP.getActiveChat()) {
+								if(!eventoP.getLinkChat().isEmpty()) {
+									dev.put("chat", eventoP.getLinkChat().toString());									
+								} else {
+									dev.put("chat", "true");
+								}
+							}
+							
+							return ResponseEntity.ok().body(dev);									
+						}
+						
+					}catch (Exception e) {
+						ErrorSimple error = new ErrorSimple();
+						error.setId(5);
+						error.setDescripcion("Error al cargar video");
+						Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+						mapError.put("error", error);
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+					}				
+				}
+			}
+		} else if(codigosServiceImpl.existById(codigosDTO.getId())) {
 			
 			Eventoquesos evento = eventosquesosServiceImpl.findByid(codigosDTO.getIdEvent());
-			if(evento.getActive() && evento != null)  {
-				Formhome formUser = formhomeServiceImpl.findById(codigosDTO.getIdUser());
-				String codigos = formUser.getIdCodigo();
-				if(codigos != "") 
-					codigos = codigos + "," + codigosDTO.getId().toString();
-				else
-					codigos = codigosDTO.getId().toString();
-				
-				
-				
-				formUser.setIdCodigo(codigos);
-				formhomeServiceImpl.save(formUser);
-				
-				Map<String, String> dev = new HashMap<String, String>();
-			
-				try {
-					String pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|"
-							+ "watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)"
-							+ "[^#\\&\\?\\n]*";
-
-			        Pattern compiledPattern = Pattern.compile(pattern);
-			        Matcher matcher = compiledPattern.matcher(evento.getLinkEvent());       
-			        String codigoYoutube = "";
+			if( evento.getId() == codigosDTO.getIdEvent())  {
+				if(evento.getActive() && evento != null ) {
+					Formhome formUser = formhomeServiceImpl.findById(codigosDTO.getIdUser());
+					List<Long> codigos = formUser.getIdCodigos();
+					List<Long> idEventos = formUser.getIdevento();
 					
-			        if (matcher.find()) {
-			        	codigoYoutube =  matcher.group();
-			        	String urlEncrypt = this.encrypt(psk, iv, codigoYoutube);
-						dev.put("dghjoi3543u", urlEncrypt);
-						//dev.put("ff", fec.toString());
+					codigos.add(codigosDTO.getId());
+					idEventos.add(codigosDTO.getIdEvent());
+					formUser.setIdevento(idEventos);
+					formUser.setIdCodigos(codigos);
+					formhomeServiceImpl.save(formUser);
+					
+					Map<String, String> dev = new HashMap<String, String>();
+					
+					try {
+						String pattern = "(?<=watch\\?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|\\/e\\/|watch\\?v%3D|"
+								+ "watch\\?feature=player_embedded&v=|%2Fvideos%2F|embed%\u200C\u200B2F|youtu.be%2F|%2Fv%2F)"
+								+ "[^#\\&\\?\\n]*";
 						
-						return ResponseEntity.ok().body(dev);									
-					}
+						Pattern compiledPattern = Pattern.compile(pattern);
+						Matcher matcher = compiledPattern.matcher(evento.getLinkEvent());       
+						String codigoYoutube = "";
+						
+						if (matcher.find()) {
+							codigoYoutube =  matcher.group();
+							String urlEncrypt = this.encrypt(psk, iv, codigoYoutube);
+							dev.put("dghjoi3543u", urlEncrypt);
+							dev.put("ff", evento.getFechaEvent());
+							
+							if(evento.getActiveChat()) {
+								if(!evento.getLinkChat().isEmpty()) {
+									dev.put("chat", evento.getLinkChat().toString());									
+								} else {
+									dev.put("chat", "true");
+								}
+							}
+							
+							return ResponseEntity.ok().body(dev);									
+						}
+						
+					}catch (Exception e) {
+						ErrorSimple error = new ErrorSimple();
+						error.setId(5);
+						error.setDescripcion("Error al cargar video");
+						Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+						mapError.put("error", error);
+						return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+					}				
 					
-				}catch (Exception e) {
-					ErrorSimple error = new ErrorSimple();
-					error.setId(3);
-					error.setDescripcion("Error al cargar video");
-					Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
-					mapError.put("error", error);
-					return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
-				}				
-				
+				}
+				ErrorSimple error = new ErrorSimple();
+				error.setId(4);
+				error.setDescripcion("Evento no habilitado!");
+				Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+				mapError.put("error", error);
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
 			}
 			
 			ErrorSimple error = new ErrorSimple();
 			error.setId(3);
-			error.setDescripcion("Evento Inavilitado");
+			error.setDescripcion("Evento incorrecto!");
 			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
 			mapError.put("error", error);
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
@@ -157,13 +225,14 @@ public class CodigosController {
 		
 		ErrorSimple error = new ErrorSimple();
 		error.setId(2);
-		error.setDescripcion("Codigo Invalido");
+		error.setDescripcion("Evento no configurado!");
 		Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
 		mapError.put("error", error);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
 		
-	};
+	}
 	
+
 	public static String encrypt(String llave, String iv, String texto) throws Exception {
         Cipher cipher = Cipher.getInstance(tipoCifrado);
         SecretKeySpec secretKeySpec = new SecretKeySpec(llave.getBytes(), algoritmo);
@@ -173,5 +242,31 @@ public class CodigosController {
         return new String(encodeBase64(encrypted));
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(name="report", path="report/{idEvento}")
+	public ResponseEntity<?> reporteCodigoByIdEvento(@PathVariable("idEvento") Long idEvento) {
+		
+		if(idEvento == null) {
+			ErrorSimple error = new ErrorSimple();
+			error.setId(1);
+			error.setDescripcion("Id vacio");
+			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+			mapError.put("error", error);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+		}
+		
+		List<Codigosingresos> listCodigos = codigosServiceImpl.findByIdEvento(idEvento);
+		
+		if(!listCodigos.isEmpty()) {
+			return ResponseEntity.ok().body(listCodigos);
+		}
+		
+		ErrorSimple error = new ErrorSimple();
+		error.setId(1);
+		error.setDescripcion("Reporte sin datos!");
+		Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+		mapError.put("error", error);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+	}
 
 }

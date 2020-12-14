@@ -1,5 +1,6 @@
 package com.paseshow.festival.quesos.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,5 +73,39 @@ public class ForhomeRestController {
 
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(listForm);
+	};
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping(name="report", path="report/{idEvento}")
+	public ResponseEntity<?> reportForm(@PathVariable("idEvento") Long idEvento) {
+		
+		
+		if(idEvento != null) {
+			List<Formhome> formReport = new ArrayList<Formhome>();
+			
+			List<Formhome> listAll = forhomeServiceImpl.findAll();
+			if(!listAll.isEmpty()) {
+				for(Formhome unForm : listAll) {
+					List<Long> idEventosUnForm = unForm.getIdevento();
+					if(idEventosUnForm.contains(idEvento)) {
+						formReport.add(unForm);
+					}
+				}
+				return ResponseEntity.ok().body(formReport);
+			}
+			ErrorSimple error = new ErrorSimple();
+			error.setId(1);
+			error.setDescripcion("Reporte sin datos!");
+			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+			mapError.put("error", error);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
+		}
+		
+		ErrorSimple error = new ErrorSimple();
+		error.setId(2);
+		error.setDescripcion("Id evento no encontrado!");
+		Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+		mapError.put("error", error);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);
 	}
 }

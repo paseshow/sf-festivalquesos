@@ -1,6 +1,9 @@
 package com.paseshow.festival.quesos.models.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,23 +32,31 @@ public class Formhome {
 	private Boolean loaddb;
 	private Boolean suscripcion;
 	
-	@ManyToOne(fetch = FetchType.LAZY) //se carga solamente cuando se hace el get
-	//automaticamente toma la llave de su tabla (id)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Eventoquesos eventoquesos;
+	
+	@ElementCollection(targetClass=Long.class)
+	private List<Long> idevento;
 	
 	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Codigosingresos codigoingreso;*/
-	
-	private String IdCodigo;
-	
-	public Eventoquesos getEventoquesos() {
-		return eventoquesos;
+	@ElementCollection(targetClass=Long.class)
+	private List<Long> idCodigos;
+
+
+	public List<Long> getIdCodigos() {
+		return idCodigos;
 	}
 
-	public void setEventoquesos(Eventoquesos eventoquesos) {
-		this.eventoquesos = eventoquesos;
+	public void setIdCodigos(List<Long> idCodigos) {
+		this.idCodigos = idCodigos;
+	}
+
+	public List<Long> getIdevento() {
+		return idevento;
+	}
+
+	public void setIdevento(List<Long> idevento) {
+		this.idevento = idevento;
 	}
 
 	public Boolean getLoaddb() {
@@ -104,14 +115,6 @@ public class Formhome {
 		this.descripcionentrada = descripcionentrada;
 	}
 
-	
-	public String getIdCodigo() {
-		return IdCodigo;
-	}
-
-	public void setIdCodigo(String IdCodigo) {
-		this.IdCodigo = IdCodigo;
-	}
 
 
 	private static final long serialVersionUID = 1L;

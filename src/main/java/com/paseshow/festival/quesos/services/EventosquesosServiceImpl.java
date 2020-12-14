@@ -48,6 +48,11 @@ public class EventosquesosServiceImpl implements EventosquesosService{
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error en el servidor. Error: " + e);
 		}
 	}
+
+	@Override
+	public List<Eventoquesos> findByFechaEventContaining(String fecha) {
+		return eventosquesosDao.findByFechaEventContaining(fecha);
+	}
 	
 
 }

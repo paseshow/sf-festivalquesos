@@ -26,18 +26,43 @@ public class EventoquesosDTO {
 	
 	@NotNull
 	private String fechaEvent;
+	
+	private String linkChat;
+	
+	private Boolean activeChat;
 
 	@JsonCreator
 	public EventoquesosDTO(
 			@JsonProperty ("nameEvent") String nameEvent,
 			@JsonProperty ("linkEvent") String linkEvent,
 			@JsonProperty ("active") Boolean active,
-			@JsonProperty ("fechaEvent") String fechaEvent
+			@JsonProperty ("fechaEvent") String fechaEvent,
+			@JsonProperty ("activeChat") Boolean activeChat,
+			@JsonProperty ("linkChat") String linkChat
 			) {
 		this.nameEvent = nameEvent;
 		this.linkEvent = linkEvent;
 		this.active = active;
 		this.fechaEvent = fechaEvent;
+		this.activeChat = activeChat;
+		this.linkChat = linkChat;
+	}
+
+	
+	public String getLinkChat() {
+		return linkChat;
+	}
+
+	public void setLinkChat(String linkChat) {
+		this.linkChat = linkChat;
+	}
+
+	public Boolean getActiveChat() {
+		return activeChat;
+	}
+
+	public void setActiveChat(Boolean activeChat) {
+		this.activeChat = activeChat;
 	}
 
 	public String getNameEvent() {

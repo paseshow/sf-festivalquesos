@@ -1,11 +1,13 @@
 package com.paseshow.festival.quesos.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.w3c.dom.ls.LSInput;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import com.paseshow.festival.quesos.model.util.ErrorSimple;
 import com.paseshow.festival.quesos.models.dto.EventoquesosDTO;
+import com.paseshow.festival.quesos.models.dto.EventosActivos;
 import com.paseshow.festival.quesos.models.entity.Eventoquesos;
 import com.paseshow.festival.quesos.services.EventosquesosServiceImpl;
 import com.paseshow.festival.quesos.services.ResourceNotFoundException;
@@ -59,6 +63,8 @@ public class EventoquesosController {
 		eventoNew.setLinkEvent(evento.getLinkEvent());
 		eventoNew.setActive(evento.getActive());
 		eventoNew.setFechaEvent(evento.getFechaEvent());
+		eventoNew.setLinkChat(evento.getLinkChat());
+		eventoNew.setActiveChat(evento.getActiveChat());
 
 		Eventoquesos eventosUpdate = eventosquesosServiceImpl.save(eventoNew);
 		
@@ -89,6 +95,68 @@ public class EventoquesosController {
 		Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
 		mapError.put("error", error);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);		
+	}
+	
+	@GetMapping(name="loadEvent", path="active")
+	public ResponseEntity<?> searchEventos(@PathParam("fechaEvento") String fechaEvento) {
+		if(fechaEvento == null) {
+			ErrorSimple error = new ErrorSimple();
+			error.setId(1);
+			error.setDescripcion("Fecha vacia");
+			Map<String, ErrorSimple> mapError = new HashMap<String, ErrorSimple>();
+			mapError.put("error", error);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapError);	
+		}
+		
+		List<Eventoquesos> listEvent = eventosquesosServiceImpl.findByFechaEventContaining(fechaEvento);
+				
+		List<EventosActivos> listActiveEvent = new ArrayList<EventosActivos>();
+		EventosActivos eventPrevio = new EventosActivos();
+		EventosActivos eventPrincipal = new EventosActivos();
+		Long fechaPrevia = new Long(0);
+		Boolean inactive = false;
+		Boolean unoActivo = false;
+		for(Eventoquesos event : listEvent) {
+			if(event.getActive()) {
+				String fechaEvt = event.getFechaEvent();
+				String[] array = fechaEvt.split("T");
+				Long fecha = Long.parseLong(array[1].replace(":", ""));
+				
+				if(eventPrevio.getIdEvento() == null) {
+					fechaPrevia = fecha;
+					eventPrevio.setIdEvento(event.getId());
+					eventPrevio.setFechaEvento(event.getFechaEvent());
+					unoActivo = true;
+					if(inactive) {
+						listActiveEvent.add(eventPrevio);
+					}
+				} else {
+					
+					eventPrincipal.setIdEvento(event.getId());
+					eventPrincipal.setFechaEvento(event.getFechaEvent());
+					
+					if(fechaPrevia < fecha) {
+						listActiveEvent.add(eventPrevio);
+						listActiveEvent.add(eventPrincipal);
+					} else {
+						listActiveEvent.add(eventPrincipal);
+						listActiveEvent.add(eventPrevio);
+					}
+				}				
+			} else {
+				inactive = true;
+				if(unoActivo) {
+					listActiveEvent.add(eventPrevio);
+				}
+			}
+		}
+		if(!listActiveEvent.isEmpty()) {
+			return ResponseEntity.ok(listActiveEvent);			
+		} else {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("No hay eventos activos");
+		}
+		
+		
 	}
 	
 	@GetMapping(name="list", path="list")
@@ -142,6 +210,8 @@ public class EventoquesosController {
 			eventoUpdate.setLinkEvent(evento.getLinkEvent());
 			eventoUpdate.setFechaEvent(evento.getFechaEvent());
 			eventoUpdate.setActive(evento.getActive());
+			eventoUpdate.setLinkChat(evento.getLinkChat());
+			eventoUpdate.setActiveChat(evento.getActiveChat());
 			
 			eventosquesosServiceImpl.save(eventoUpdate);
 			

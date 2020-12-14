@@ -14,4 +14,5 @@ public interface EventosquesosService {
 	public List<Eventoquesos> findAll();
 	public Eventoquesos findByid(Long id);
 	public Boolean delete(Eventoquesos eventoquesos);
+	public List<Eventoquesos> findByFechaEventContaining(String fecha);
 }
