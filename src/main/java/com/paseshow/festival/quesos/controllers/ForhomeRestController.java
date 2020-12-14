@@ -51,8 +51,10 @@ public class ForhomeRestController {
 		}
 		Formhome aux = new Formhome();
 		aux.setNombre(forhomeadd.getNombre());
+		aux.setApellido(forhomeadd.getApellido());
 		aux.setEmail(forhomeadd.getEmail());
 		aux.setTelefono(forhomeadd.getTelefono());
+		aux.setTipoSector(forhomeadd.getTipoSector());
 		aux.setDescripcionentrada(forhomeadd.getDescripcionentrada());
 		aux.setLoaddb(forhomeadd.getLoaddb());
 		aux.setSuscripcion(forhomeadd.getSuscripcion());

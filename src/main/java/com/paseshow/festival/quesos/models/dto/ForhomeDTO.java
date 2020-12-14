@@ -16,6 +16,9 @@ public class ForhomeDTO {
 	@Size(max=35)
 	private String nombre;
 	
+	@Size(max=35)
+	private String apellido;
+	
 	@NotNull
 	@Size(max=35)
 	private String email;
@@ -23,6 +26,9 @@ public class ForhomeDTO {
 	@NotNull
 	@Size(max=22)
 	private String telefono;
+	
+	@NotNull
+	private String tipoSector;
 	
 	@NotNull
 	private String descripcionentrada;
@@ -37,20 +43,49 @@ public class ForhomeDTO {
 	@JsonCreator
 	public ForhomeDTO(
 			@JsonProperty("nombre") String nombre,
+			@JsonProperty("apellido") String apellido,
 			@JsonProperty("email") String email,
 			@JsonProperty("telefono") String telefono,
+			@JsonProperty("tipoSector") String tipoSector,
 			@JsonProperty("descripcionentrada") String descripcionentrada,
 			@JsonProperty("loaddb") Boolean loaddb,
 			@JsonProperty("suscripcion") Boolean suscripcion
 			
 			) {
 		this.nombre = nombre;
+		this.apellido = apellido;
 		this.email = email;
 		this.telefono = telefono;
+		this.tipoSector = tipoSector;
 		this.descripcionentrada = descripcionentrada;
 		this.loaddb = loaddb;
 		this.suscripcion = suscripcion;
 	}
+
+	
+
+	public String getTipoSector() {
+		return tipoSector;
+	}
+
+
+
+	public void setTipoSector(String tipoSector) {
+		this.tipoSector = tipoSector;
+	}
+
+
+
+	public String getApellido() {
+		return apellido;
+	}
+
+
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
 
 
 	public String getNombre() {
