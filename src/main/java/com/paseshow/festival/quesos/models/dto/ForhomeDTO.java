@@ -16,6 +16,9 @@ public class ForhomeDTO {
 	@Size(max=35)
 	private String nombre;
 	
+	@Size(max=35)
+	private String apellido;
+	
 	@NotNull
 	@Size(max=35)
 	private String email;
@@ -25,32 +28,55 @@ public class ForhomeDTO {
 	private String telefono;
 	
 	@NotNull
-	private String descripcionentrada;
+	private String tipoSector;
+	
 	
 	@NotNull
 	private Boolean loaddb;
-	
-	@NotNull
-	private Boolean suscripcion;
 
 	
 	@JsonCreator
 	public ForhomeDTO(
 			@JsonProperty("nombre") String nombre,
+			@JsonProperty("apellido") String apellido,
 			@JsonProperty("email") String email,
 			@JsonProperty("telefono") String telefono,
-			@JsonProperty("descripcionentrada") String descripcionentrada,
-			@JsonProperty("loaddb") Boolean loaddb,
+			@JsonProperty("tipoSector") String tipoSector,
 			@JsonProperty("suscripcion") Boolean suscripcion
 			
 			) {
 		this.nombre = nombre;
+		this.apellido = apellido;
 		this.email = email;
 		this.telefono = telefono;
-		this.descripcionentrada = descripcionentrada;
+		this.tipoSector = tipoSector;
 		this.loaddb = loaddb;
-		this.suscripcion = suscripcion;
 	}
+
+	
+
+	public String getTipoSector() {
+		return tipoSector;
+	}
+
+
+
+	public void setTipoSector(String tipoSector) {
+		this.tipoSector = tipoSector;
+	}
+
+
+
+	public String getApellido() {
+		return apellido;
+	}
+
+
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
 
 
 	public String getNombre() {
@@ -83,16 +109,6 @@ public class ForhomeDTO {
 	}
 
 
-	public String getDescripcionentrada() {
-		return descripcionentrada;
-	}
-
-
-	public void setDescripcionentrada(String descripcionentrada) {
-		this.descripcionentrada = descripcionentrada;
-	}
-
-
 	public Boolean getLoaddb() {
 		return loaddb;
 	}
@@ -100,15 +116,5 @@ public class ForhomeDTO {
 
 	public void setLoaddb(Boolean loaddb) {
 		this.loaddb = loaddb;
-	}
-
-
-	public Boolean getSuscripcion() {
-		return suscripcion;
-	}
-
-
-	public void setSuscripcion(Boolean suscripcion) {
-		this.suscripcion = suscripcion;
 	}
 }

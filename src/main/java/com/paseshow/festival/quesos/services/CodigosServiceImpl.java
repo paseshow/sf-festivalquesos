@@ -1,5 +1,7 @@
 package com.paseshow.festival.quesos.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,11 @@ public class CodigosServiceImpl implements CodigosService{
 			return null;
 		}
 
+	}
+
+	@Override
+	public List<Codigosingresos> findByIdEvento(Long idEvento) {
+		return codigosDao.findByIdEvento(idEvento);
 	}
 
 }

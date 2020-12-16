@@ -1,6 +1,9 @@
 package com.paseshow.festival.quesos.models.entity;
 
 import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,29 +26,55 @@ public class Formhome {
 	
 	
 	private String nombre;
+	private String apellido;
 	private String email;
 	private String telefono;
-	private String descripcionentrada;
+	private String tipoSector;
 	private Boolean loaddb;
-	private Boolean suscripcion;
+
 	
-	@ManyToOne(fetch = FetchType.LAZY) //se carga solamente cuando se hace el get
-	//automaticamente toma la llave de su tabla (id)
-	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-	private Eventoquesos eventoquesos;
+	
+	@ElementCollection(targetClass=Long.class)
+	private List<Long> idevento;
 	
 	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Codigosingresos codigoingreso;*/
+	@ElementCollection(targetClass=Long.class)
+	private List<Long> idCodigos;
+
 	
-	private String IdCodigo;
-	
-	public Eventoquesos getEventoquesos() {
-		return eventoquesos;
+
+	public String getTipoSector() {
+		return tipoSector;
 	}
 
-	public void setEventoquesos(Eventoquesos eventoquesos) {
-		this.eventoquesos = eventoquesos;
+	public void setTipoSector(String tipoSector) {
+		this.tipoSector = tipoSector;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public List<Long> getIdCodigos() {
+		return idCodigos;
+	}
+
+	public void setIdCodigos(List<Long> idCodigos) {
+		this.idCodigos = idCodigos;
+	}
+
+	public List<Long> getIdevento() {
+		return idevento;
+	}
+
+	public void setIdevento(List<Long> idevento) {
+		this.idevento = idevento;
 	}
 
 	public Boolean getLoaddb() {
@@ -64,13 +93,6 @@ public class Formhome {
 		this.loaddb = loaddb;
 	}
 
-	public Boolean getSuscripcion() {
-		return suscripcion;
-	}
-
-	public void setSuscripcion(Boolean suscripcion) {
-		this.suscripcion = suscripcion;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -96,22 +118,7 @@ public class Formhome {
 		this.telefono = telefono;
 	}
 
-	public String getDescripcionentrada() {
-		return descripcionentrada;
-	}
 
-	public void setDescripcionentrada(String descripcionentrada) {
-		this.descripcionentrada = descripcionentrada;
-	}
-
-	
-	public String getIdCodigo() {
-		return IdCodigo;
-	}
-
-	public void setIdCodigo(String IdCodigo) {
-		this.IdCodigo = IdCodigo;
-	}
 
 
 	private static final long serialVersionUID = 1L;
