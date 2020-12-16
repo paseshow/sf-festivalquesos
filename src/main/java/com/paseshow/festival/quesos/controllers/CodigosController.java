@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,6 +65,9 @@ public class CodigosController {
 	
 	@Autowired
 	private IFormhomeServiceImpl formhomeServiceImpl;
+	
+	@Autowired
+	private CodigosDao codigosDao;
 	
 	@PreAuthorize("hasRole('USER')")
 	@PostMapping(name="save", path="loadCodigos")
@@ -156,7 +160,8 @@ public class CodigosController {
 		} else if(codigosServiceImpl.existById(codigosDTO.getId())) {
 			
 			Eventoquesos evento = eventosquesosServiceImpl.findByid(codigosDTO.getIdEvent());
-			if( evento.getId() == codigosDTO.getIdEvent())  {
+			Codigosingresos codigoSearch = codigosDao.findById(codigosDTO.getId()).get();
+			if( evento.getId() == codigoSearch.getIdEvento())  {
 				if(evento.getActive() && evento != null ) {
 					Formhome formUser = formhomeServiceImpl.findById(codigosDTO.getIdUser());
 					List<Long> codigos = formUser.getIdCodigos();
