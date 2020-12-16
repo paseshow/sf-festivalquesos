@@ -30,14 +30,9 @@ public class ForhomeDTO {
 	@NotNull
 	private String tipoSector;
 	
-	@NotNull
-	private String descripcionentrada;
 	
 	@NotNull
 	private Boolean loaddb;
-	
-	@NotNull
-	private Boolean suscripcion;
 
 	
 	@JsonCreator
@@ -47,8 +42,6 @@ public class ForhomeDTO {
 			@JsonProperty("email") String email,
 			@JsonProperty("telefono") String telefono,
 			@JsonProperty("tipoSector") String tipoSector,
-			@JsonProperty("descripcionentrada") String descripcionentrada,
-			@JsonProperty("loaddb") Boolean loaddb,
 			@JsonProperty("suscripcion") Boolean suscripcion
 			
 			) {
@@ -57,9 +50,7 @@ public class ForhomeDTO {
 		this.email = email;
 		this.telefono = telefono;
 		this.tipoSector = tipoSector;
-		this.descripcionentrada = descripcionentrada;
 		this.loaddb = loaddb;
-		this.suscripcion = suscripcion;
 	}
 
 	
@@ -118,16 +109,6 @@ public class ForhomeDTO {
 	}
 
 
-	public String getDescripcionentrada() {
-		return descripcionentrada;
-	}
-
-
-	public void setDescripcionentrada(String descripcionentrada) {
-		this.descripcionentrada = descripcionentrada;
-	}
-
-
 	public Boolean getLoaddb() {
 		return loaddb;
 	}
@@ -135,15 +116,5 @@ public class ForhomeDTO {
 
 	public void setLoaddb(Boolean loaddb) {
 		this.loaddb = loaddb;
-	}
-
-
-	public Boolean getSuscripcion() {
-		return suscripcion;
-	}
-
-
-	public void setSuscripcion(Boolean suscripcion) {
-		this.suscripcion = suscripcion;
 	}
 }

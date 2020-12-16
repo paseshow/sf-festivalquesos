@@ -55,9 +55,7 @@ public class ForhomeRestController {
 		aux.setEmail(forhomeadd.getEmail());
 		aux.setTelefono(forhomeadd.getTelefono());
 		aux.setTipoSector(forhomeadd.getTipoSector());
-		aux.setDescripcionentrada(forhomeadd.getDescripcionentrada());
 		aux.setLoaddb(forhomeadd.getLoaddb());
-		aux.setSuscripcion(forhomeadd.getSuscripcion());
 		
 		Formhome resp = this.forhomeServiceImpl.save(aux);
 		

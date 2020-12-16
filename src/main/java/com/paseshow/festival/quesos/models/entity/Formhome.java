@@ -30,9 +30,7 @@ public class Formhome {
 	private String email;
 	private String telefono;
 	private String tipoSector;
-	private String descripcionentrada;
 	private Boolean loaddb;
-	private Boolean suscripcion;
 
 	
 	
@@ -95,13 +93,6 @@ public class Formhome {
 		this.loaddb = loaddb;
 	}
 
-	public Boolean getSuscripcion() {
-		return suscripcion;
-	}
-
-	public void setSuscripcion(Boolean suscripcion) {
-		this.suscripcion = suscripcion;
-	}
 
 	public String getNombre() {
 		return nombre;
@@ -127,13 +118,6 @@ public class Formhome {
 		this.telefono = telefono;
 	}
 
-	public String getDescripcionentrada() {
-		return descripcionentrada;
-	}
-
-	public void setDescripcionentrada(String descripcionentrada) {
-		this.descripcionentrada = descripcionentrada;
-	}
 
 
 
