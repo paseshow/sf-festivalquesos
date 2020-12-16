@@ -19,12 +19,10 @@ public class ForhomeDTO {
 	@Size(max=35)
 	private String apellido;
 	
-	@NotNull
-	@Size(max=35)
+
 	private String email;
 	
-	@NotNull
-	@Size(max=22)
+
 	private String telefono;
 	
 	@NotNull
